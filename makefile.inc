@@ -5,26 +5,11 @@ CHECKLEVEL2 = @if [ "$(LEVEL)" != 2 ]; then $(MAKE) help; false; fi
 # Choose the compiler you want to use
 CC?=gcc
 
-# athlon optimizations
-#CPUOPTIMIZATIONS?=-march=athlon
-# athlon xp optimizations
-#CPUOPTIMIZATIONS?=-march=athlon-xp
-# athlon 64 optimizations
-#CPUOPTIMIZATIONS?=-march=athlon64 -m32
-# Pentium 3 optimizations
-#CPUOPTIMIZATIONS?=-march=pentium3
-# Pentium 4 optimizations
-#CPUOPTIMIZATIONS?=-march=pentium4
-# 686 (Pentium Pro/II) optimizations
-#CPUOPTIMIZATIONS?=-march=i686
-# No specific CPU (386 compatible)
-#CPUOPTIMIZATIONS?=
 # Experimental
-#CPUOPTIMIZATIONS?=-fno-math-errno -fno-rounding-math -fno-signaling-nans -fassociative-math -freciprocal-math -fno-signed-zeros -fno-trapping-math
+CPUOPTIMIZATIONS?=-fno-math-errno -fno-rounding-math -fno-signaling-nans -fassociative-math -freciprocal-math -fno-signed-zeros -fno-trapping-math
+
 # Normal
-CPUOPTIMIZATIONS?=-fno-math-errno -fno-rounding-math -fno-signaling-nans -fno-trapping-math
-# NOTE: *never* *ever* use the -ffast-math or -funsafe-math-optimizations flag
-# Also, since gcc 5, -ffinite-math-only makes NaN and zero compare equal inside engine code but not inside QC, which causes error spam for seemingly valid QC code like if (x != 0) return 1 / x;
+#CPUOPTIMIZATIONS?=-fno-math-errno -fno-rounding-math -fno-signaling-nans -fno-trapping-math
 
 SDL_CONFIG?=sdl2-config
 SDLCONFIG_UNIXCFLAGS?=`$(SDL_CONFIG) --cflags`
@@ -37,7 +22,6 @@ SDLCONFIG_MACOSXCFLAGS=-I/Library/Frameworks/SDL2.framework/Headers -I$(HOME)/Li
 SDLCONFIG_MACOSXLIBS=-F$(HOME)/Library/Frameworks/ -framework SDL2 -framework Cocoa $(SDLCONFIG_MACOSXCFLAGS)
 SDLCONFIG_MACOSXSTATICLIBS=-F$(HOME)/Library/Frameworks/ -framework SDL2 -framework Cocoa $(SDLCONFIG_MACOSXCFLAGS)
 STRIP?=strip
-
 
 ###### Sound and audio CD #####
 
@@ -272,7 +256,7 @@ LDFLAGS_SUNOSSDL=$(LDFLAGS_UNIXCOMMON) -lrt -ldl -lsocket -lnsl $(LDFLAGS_UNIXSD
 
 # Link
 LDFLAGS_BSDCL=$(LDFLAGS_UNIXCOMMON) -lutil $(LDFLAGS_UNIXCL)
-LDFLAGS_BSDSV=$(LDFLAGS_UNIXCOMMON) 
+LDFLAGS_BSDSV=$(LDFLAGS_UNIXCOMMON)
 LDFLAGS_BSDSDL=$(LDFLAGS_UNIXCOMMON) $(LDFLAGS_UNIXSDL)
 
 
@@ -287,9 +271,10 @@ OBJ_WGL= builddate.c sys_win.o vid_wgl.o thread_null.o $(OBJ_MENU) $(OBJ_SND_WIN
 LDFLAGS_WINCL=$(LDFLAGS_WINCOMMON) $(LIB_CRYPTO) $(LIB_CRYPTO_RIJNDAEL) -mwindows -lwinmm -luser32 -lgdi32 -ldxguid -ldinput -lcomctl32 -lws2_32 $(LDFLAGS_D3D) $(LIB_Z) $(LIB_JPEG)
 LDFLAGS_WINSV=$(LDFLAGS_WINCOMMON) $(LIB_CRYPTO) $(LIB_CRYPTO_RIJNDAEL) -mconsole -lwinmm -lws2_32 $(LIB_Z) $(LIB_JPEG)
 LDFLAGS_WINSDL=$(LDFLAGS_WINCOMMON) $(LIB_CRYPTO) $(LIB_CRYPTO_RIJNDAEL) $(SDLCONFIG_LIBS) -lwinmm -lws2_32 $(LIB_Z) $(LIB_JPEG)
-EXE_WINCL=darkplaces.exe
-EXE_WINSV=darkplaces-dedicated.exe
-EXE_WINSDL=darkplaces-sdl.exe
+
+EXE_WINCL=xonotic.exe
+EXE_WINSV=xonotic-dedicated.exe
+EXE_WINSDL=xonotic-sdl.exe
 EXE_WINCLNEXUIZ=nexuiz.exe
 EXE_WINSVNEXUIZ=nexuiz-dedicated.exe
 EXE_WINSDLNEXUIZ=nexuiz-sdl.exe

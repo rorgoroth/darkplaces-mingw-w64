@@ -252,9 +252,11 @@ else
 endif
 
 ifeq ($(WIN64RELEASE), 1)
-#	TARGET=x86_64-pc-mingw32
-#	CC=$(TARGET)-g++
-#	WINDRES=$(TARGET)-windres
+	TARGET=x86_64-w64-mingw32
+	CC=$(TARGET)-g++
+	WINDRES=$(TARGET)-windres
+	STRIP=$(TARGET)-strip
+	SDL_CONFIG=/mingw64/x86_64-w64-mingw32/bin/sdl2-config
 endif
 
 ifeq ($(D3D), 1)
@@ -263,7 +265,7 @@ ifeq ($(D3D), 1)
 	LDFLAGS_D3D=-ld3d9
 else
 	CFLAGS_D3D=
-	CFLAGS_WARNINGS=-Wall -Wold-style-definition -Wstrict-prototypes -Wsign-compare -Wdeclaration-after-statement -Wmissing-prototypes
+	CFLAGS_WARNINGS=-Wall
 	LDFLAGS_D3D=
 endif
 
