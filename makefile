@@ -231,6 +231,24 @@ ifeq ($(DP_MAKE_TARGET), bsd)
 endif
 
 # Win32 configuration
+ifeq ($(WIN32RELEASE), 1)
+#	TARGET=i686-pc-mingw32
+#	CC=$(TARGET)-g++
+#	WINDRES=$(TARGET)-windres
+#	CPUOPTIMIZATIONS=-march=pentium3 -mfpmath=sse -fno-math-errno -fno-rounding-math -fno-signaling-nans -fno-trapping-math
+#	LDFLAGS_WINCOMMON=
+endif
+
+ifeq ($(WIN64RELEASE), 1)
+	TARGET=x86_64-w64-mingw32
+	CC=$(TARGET)-gcc
+	WINDRES=$(TARGET)-windres
+	STRIP=$(TARGET)-strip
+    CPUOPTIMIZATIONS=-march=x86-64-v3 -O3 -flto=thin -fdata-sections -ffunction-sections -fvisibility=hidden -DUSE_WSPIAPI_H -DSUPPORTIPV6
+endif
+
+CFLAGS_WARNINGS=-Wall
+
 ifeq ($(DP_MAKE_TARGET), mingw)
 	OBJ_ICON=darkplaces.o
 	OBJ_ICON_NEXUIZ=nexuiz.o
@@ -248,7 +266,7 @@ ifeq ($(DP_MAKE_TARGET), mingw)
 	EXE_SDLNEXUIZ=$(EXE_WINSDLNEXUIZ)
 
 	DP_LINK_SDL?=shared
-	DP_LINK_ZLIB?=dlopen
+	DP_LINK_ZLIB?=shared
 	DP_LINK_JPEG?=shared
 	DP_LINK_ODE?=
 	DP_LINK_CRYPTO?=dlopen
