@@ -16,7 +16,7 @@ my $parsing_fields = undef;
 my $parsing_globals = undef;
 my $parsing_vm = undef;
 
-for(<../*.h>, <../*.c>)
+for(<../../src/*/*.h>, <../../src/*/*.c>)
 {
 	open my $fh, "<", $_
 		or die "<$_: $!";

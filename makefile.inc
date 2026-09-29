@@ -160,7 +160,16 @@ else
 	CFLAGS_MAKEDEP?=-MMD
 endif
 
-CFLAGS_COMMON=$(CFLAGS_STANDARD) $(CFLAGS_TCC) $(CFLAGS_MAKEDEP) $(CFLAGS_PRELOAD) $(CFLAGS_FS) $(CFLAGS_WARNINGS) $(CFLAGS_LIBZ) $(CFLAGS_LIBJPEG) $(CFLAGS_SND_XMP) $(CFLAGS_NET) $(CFLAGS_SDL) -D_FILE_OFFSET_BITS=64 -D__KERNEL_STRICT_NAMES -I../../../
+# Source layout
+# Sources live in src/<subsystem>/ and are compiled from the per-build directory
+# build-obj/<type>/<exe>/, so paths below are relative to the repository root (../../../).
+# Headers are still included by bare name ("quakedef.h"), so every subsystem
+# directory is on the include path.
+SRC_SUBDIRS:=core fs net client server vm physics render model sound
+SRC_PATHS:=$(addprefix ../../../src/,$(SRC_SUBDIRS))
+CFLAGS_SRC_INCLUDES:=$(addprefix -I,$(SRC_PATHS))
+
+CFLAGS_COMMON=$(CFLAGS_STANDARD) $(CFLAGS_TCC) $(CFLAGS_MAKEDEP) $(CFLAGS_PRELOAD) $(CFLAGS_FS) $(CFLAGS_WARNINGS) $(CFLAGS_LIBZ) $(CFLAGS_LIBJPEG) $(CFLAGS_SND_XMP) $(CFLAGS_NET) $(CFLAGS_SDL) -D_FILE_OFFSET_BITS=64 -D__KERNEL_STRICT_NAMES $(CFLAGS_SRC_INCLUDES)
 CFLAGS_CLIENT=-DCONFIG_MENU $(CFLAGS_VIDEO_CAPTURE)
 CFLAGS_SERVER=
 CFLAGS_DEBUG=-ggdb
@@ -249,7 +258,7 @@ LDFLAGS_WASMJS=$(LDFLAGS_UNIXCOMMON) -s USE_SDL=2 \
                                    -s STACK_SIZE=8mb \
                                    -DUSE_GLES2 \
                                    -lidbfs.js \
-                                   --pre-js ../../../wasm/pre.js \
+                                   --pre-js ../../../platform/wasm/pre.js \
                                    -s EXPORTED_RUNTIME_METHODS=callMain,addRunDependency,removeRunDependency
 
 LDFLAGS_WASM=$(LDFLAGS_UNIXCOMMON) -s USE_SDL=2 \
@@ -267,10 +276,10 @@ LDFLAGS_WASM=$(LDFLAGS_UNIXCOMMON) -s USE_SDL=2 \
                                    -s STACK_SIZE=8mb \
                                    -DUSE_GLES2 \
                                    -lidbfs.js \
-                                   --pre-js ../../../wasm/standaloneprejs.js \
+                                   --pre-js ../../../platform/wasm/standaloneprejs.js \
                                    -s EXPORTED_RUNTIME_METHODS=callMain,addRunDependency,removeRunDependency \
-								   --shell-file ../../../wasm/standalone-shell.html \
-								   --embed-file ../../../wasm/preload@/preload
+								   --shell-file ../../../platform/wasm/standalone-shell.html \
+								   --embed-file ../../../platform/wasm/preload@/preload
 
 
 ##### Mac OS X specific variables #####
@@ -310,7 +319,8 @@ EXE_WINSDL=xonotic-sdl.exe
 EXE_WINSVNEXUIZ=nexuiz-dedicated.exe
 EXE_WINSDLNEXUIZ=nexuiz-sdl.exe
 
-VPATH := ../../../
+# Where make looks for sources (and the Windows .rc files) - objects stay flat in the build dir
+VPATH := $(SRC_PATHS) ../../../platform/windows
 
 ##### Commands #####
 

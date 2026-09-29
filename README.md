@@ -115,7 +115,7 @@ To install it, run the Visual Studio Installer, click "Modify", click "Individua
 You will also need "NuGet package manager" selected (to download SDL2 headers the first time you build).
 Click "Modify" to apply the changes.  
 
-Open `darkplaces-vs2019.sln`, select build type (`Debug` or `Release`) and platform (`Win32` or `x64`), and choose "Build Solution" from the "Build" menu to create files `darkplaces-sdl2-vs2019.exe` and `SDL2.dll`.
+Open `platform/windows/darkplaces-vs2019.sln`, select build type (`Debug` or `Release`) and platform (`Win32` or `x64`), and choose "Build Solution" from the "Build" menu to create files `darkplaces-sdl2-vs2019.exe` and `SDL2.dll`.
 
 The Release build crashes. The Debug x64 build doesn't crash (but is rather slow) so this will be Fun for someone to debug.
 
@@ -131,11 +131,11 @@ Note that this requires a linux device or WSL2.
    ```shell
    make emscripten-release
    ```
-1. Copy `darkplaces-wasm.js`, `wasm/index.html`, and `wasm/autoexec.cfg` files to your web server
+1. Copy `darkplaces-wasm.js`, `platform/wasm/index.html`, and `platform/wasm/autoexec.cfg` files to your web server
 1. Copy the Quake `pak0.pak` and any other files into the same web server directory
 
 For the standalone version (single HTML file containing engine and data):
-1. Before compiling, copy game data and .cfg files to the appropriate gamedir in `wasm/preload` (for example, pak0 from Quake would be in `wasm/preload/id1/pak0.pak`)
+1. Before compiling, copy game data and .cfg files to the appropriate gamedir in `platform/wasm/preload` (for example, pak0 from Quake would be in `platform/wasm/preload/id1/pak0.pak`)
 1. After activating and sourcing emsdk, compile DarkPlaces for wasm using;
    ```shell
    make emscripten-standalone
@@ -144,6 +144,27 @@ For the standalone version (single HTML file containing engine and data):
 1. If you want to upload files into the game filesystem, use `em_upload` in the darkplaces console (upload to /save if you want it to save across restarts)
 1. To save the stuff you uploaded to /save, use `em_save` (note that if you embedded the game, you won't be able to save changes to `/save/games`)
 
+
+## Source layout
+
+```
+src/
+  core/      console, cvars, commands, memory, host loop, math, threads, OS glue (sys_*)
+  fs/        virtual filesystem, pak/wad/vpk handling
+  net/       netconn, sockets, protocol, entity/message coding, crypto, libcurl
+  client/    cl_*, HUD, menu, input/keys, video capture, video playback
+  server/    sv_*, world
+  vm/        QuakeC VM (prvm_*), client/server/menu builtins, csprogs
+  physics/   collision, BIH, convex hulls, polygons, shared movement
+  render/    gl_*, r_*, video backend (vid_*), fonts, image loading, shadow BSP, portals
+  model/     model loaders (BSP, MDL/MD3/IQM/... , sprites), curves
+  sound/     mixer, sound formats, CD audio
+platform/    windows/ (.rc, icons, Visual Studio project), unix/, apple/, wasm/
+docs/        darkplaces.txt, todo, Doxyfile, dpdefs/
+tools/       standalone helper programs and scripts
+```
+
+Headers are included by bare name (`#include "quakedef.h"`); the makefile puts every `src/` subdirectory on the include path, so files can move between subdirectories without editing `#include` lines.
 
 ## Contributing
 
