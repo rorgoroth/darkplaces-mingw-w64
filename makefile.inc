@@ -6,7 +6,8 @@ CHECKLEVEL2 = @if [ "$(LEVEL)" != 2 ]; then $(MAKE) help; false; fi
 CC?=clang
 
 SDL_CONFIG?=sdl2-config
-SDLCONFIG_UNIXCFLAGS?=`$(SDL_CONFIG) --cflags`
+# -isystem so warnings from SDL's own headers are not reported
+SDLCONFIG_UNIXCFLAGS?=`$(SDL_CONFIG) --cflags | sed 's/-I/-isystem /g'`
 SDLCONFIG_UNIXCFLAGS_X11?=
 SDLCONFIG_UNIXLIBS?=`$(SDL_CONFIG) --libs`
 SDLCONFIG_UNIXLIBS_X11?=-lX11

@@ -225,7 +225,6 @@ server_static_t svs;
 
 mempool_t *sv_mempool = NULL;
 
-extern cvar_t host_timescale;
 extern float		scr_centertime_off;
 
 // MUST match effectnameindex_t in client.h

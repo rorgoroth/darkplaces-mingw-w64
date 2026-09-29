@@ -1718,7 +1718,7 @@ addgamedirs_t FS_SetGameDirs(int numgamedirs, const char *gamedirs[], qbool fail
 
 qbool FS_ChangeGameDirs(int numgamedirs, const char *gamedirs[], qbool failmissing)
 {
-	addgamedirs_t addresult = COM_ChangeGameTypeForGameDirs(numgamedirs, gamedirs, failmissing, false);
+	addgamedirs_t addresult = (addgamedirs_t)COM_ChangeGameTypeForGameDirs(numgamedirs, gamedirs, failmissing, false);
 
 	if (addresult == GAMEDIRS_ALLGOOD)
 		return true; // already using this set of gamedirs, do nothing

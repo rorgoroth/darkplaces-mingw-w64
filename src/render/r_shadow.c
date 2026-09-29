@@ -4160,7 +4160,6 @@ void R_Shadow_PrepareLights(void)
 		// we may have to make multiple attempts to fit the shadowmaps in the limited space of the atlas, this will appear as lod popping of all shadowmaps whenever it changes, but at least we can still cast shadows from all lights...
 		for (lod = 0; lod < 16; lod++)
 		{
-			int packing_success = 0;
 			int packing_failure = 0;
 			Mod_AllocLightmap_Reset(&r_shadow_shadowmapatlas_state);
 			// we actually have to reserve space for the R_DrawModelShadowMaps if that feature is active, it uses 0,0 so this is easy.
@@ -4182,7 +4181,6 @@ void R_Shadow_PrepareLights(void)
 				if (Mod_AllocLightmap_Block(&r_shadow_shadowmapatlas_state, width, height, &rtlight->shadowmapatlasposition[0], &rtlight->shadowmapatlasposition[1]))
 				{
 					rtlight->shadowmapatlassidesize = size;
-					packing_success++;
 				}
 				else
 				{
@@ -5037,7 +5035,6 @@ typedef enum lighttype_e {LIGHTTYPE_MINUSX, LIGHTTYPE_RECIPX, LIGHTTYPE_RECIPXX,
 
 void R_Shadow_LoadWorldLightsFromMap_LightArghliteTyrlite(void)
 {
-	int entnum;
 	int style;
 	int islight;
 	int skin;
@@ -5064,7 +5061,7 @@ void R_Shadow_LoadWorldLightsFromMap_LightArghliteTyrlite(void)
 		data = cl.worldmodel->brush.entities;
 	if (!data)
 		return;
-	for (entnum = 0;COM_ParseToken_Simple(&data, false, false, true) && com_token[0] == '{';entnum++)
+	while (COM_ParseToken_Simple(&data, false, false, true) && com_token[0] == '{')
 	{
 		type = LIGHTTYPE_MINUSX;
 		origin[0] = origin[1] = origin[2] = 0;

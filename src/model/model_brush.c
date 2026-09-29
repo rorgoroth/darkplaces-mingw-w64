@@ -8429,7 +8429,6 @@ void Mod_OBJ_Load(model_t *mod, void *buffer, void *bufferend)
 	int numtriangles = 0;
 	int maxtriangles = 0;
 	objvertex_t *vertices = NULL;
-	int linenumber = 0;
 	int maxtextures = 0, numtextures = 0, textureindex = 0;
 	int maxv = 0, numv = 1;
 	int maxvt = 0, numvt = 1;
@@ -8520,7 +8519,6 @@ void Mod_OBJ_Load(model_t *mod, void *buffer, void *bufferend)
 		static char emptyarg[1] = "";
 		if (!*text)
 			break;
-		linenumber++;
 		linelen = 0;
 		for (linelen = 0;text[linelen] && text[linelen] != '\r' && text[linelen] != '\n';linelen++)
 			line[linelen] = text[linelen];

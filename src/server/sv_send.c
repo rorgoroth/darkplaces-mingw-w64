@@ -728,7 +728,6 @@ qbool SV_CanSeeBox(int numtraces, vec_t eyejitter, vec_t enlarge, vec_t entboxex
 	float starttransformed[3], endtransformed[3];
 	float boxminstransformed[3], boxmaxstransformed[3];
 	float localboxcenter[3], localboxextents[3], localboxmins[3], localboxmaxs[3];
-	int blocked = 0;
 	int traceindex;
 	int originalnumtouchedicts;
 	int numtouchedicts = 0;
@@ -844,7 +843,6 @@ qbool SV_CanSeeBox(int numtraces, vec_t eyejitter, vec_t enlarge, vec_t entboxex
 				localboxmaxs[2] = localboxcenter[2] + localboxextents[2];
 				if (!model->brush.TraceLineOfSight(model, starttransformed, endtransformed, localboxmins, localboxmaxs))
 				{
-					blocked++;
 					break;
 				}
 			}

@@ -1475,7 +1475,6 @@ static unsigned int *collision_cachedtrace_arrayfullhashindex;
 static unsigned int *collision_cachedtrace_arrayhashindex;
 static unsigned int *collision_cachedtrace_arraynext;
 static unsigned char *collision_cachedtrace_arrayused;
-static qbool collision_cachedtrace_rebuildhash;
 
 void Collision_Cache_Reset(qbool resetlimits)
 {
@@ -1503,7 +1502,6 @@ void Collision_Cache_Reset(qbool resetlimits)
 	collision_cachedtrace_arraynext = (unsigned int *)Mem_Alloc(collision_cachedtrace_mempool, collision_cachedtrace_max * sizeof(unsigned int));
 	collision_cachedtrace_arrayused = (unsigned char *)Mem_Alloc(collision_cachedtrace_mempool, collision_cachedtrace_max * sizeof(unsigned char));
 	collision_cachedtrace_sequence = 1;
-	collision_cachedtrace_rebuildhash = false;
 }
 
 void Collision_Cache_Init(mempool_t *mempool)
@@ -1523,7 +1521,6 @@ static void Collision_Cache_RebuildHash(void)
 	unsigned int hashindex;
 	unsigned int *arrayhashindex = collision_cachedtrace_arrayhashindex;
 	unsigned int *arraynext = collision_cachedtrace_arraynext;
-	collision_cachedtrace_rebuildhash = false;
 	memset(collision_cachedtrace_hash, 0, collision_cachedtrace_hashsize * sizeof(int));
 	for (index = 1;index < range;index++)
 	{
@@ -1565,7 +1562,6 @@ void Collision_Cache_NewFrame(void)
 	}
 	else
 	{
-		collision_cachedtrace_rebuildhash = true;
 		collision_cachedtrace_sequence++;
 	}
 }

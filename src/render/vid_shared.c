@@ -1093,7 +1093,6 @@ static void Force_CenterView_f(cmd_state_t *cmd)
 	cl.viewangles[PITCH] = 0;
 }
 
-static int gamma_forcenextframe = false;
 static float cachegamma, cachebrightness, cachecontrast, cacheblack[3], cachegrey[3], cachewhite[3], cachecontrastboost;
 static int cachecolorenable;
 
@@ -1148,7 +1147,6 @@ void VID_BuildGammaTables(unsigned short *ramps, int rampsize)
 		static float n[3], nd[3], nt[3];
 		static int init = true;
 		unsigned short *ramp;
-		gamma_forcenextframe = true;
 		if (init)
 		{
 			init = false;

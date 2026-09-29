@@ -83,7 +83,15 @@ Uchar u8_tolower(Uchar ch);
 // WTF-8 encoding to circumvent Windows encodings, be it UTF-16 or random codepages
 // https://simonsapin.github.io/wtf-8/
 
+// wchar_t is a keyword in C++ but a typedef in C; this is intentional here
+#ifdef __clang__
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wc++-keyword"
+#endif
 typedef wchar_t wchar;
+#ifdef __clang__
+#pragma clang diagnostic pop
+#endif
 
 // whether to regard wchar as utf-32
 // sizeof(wchar_t) is 2 for win32, we don't have sizeof in macros
