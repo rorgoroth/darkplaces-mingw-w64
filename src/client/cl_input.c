@@ -1573,12 +1573,6 @@ void CL_UpdateMoveVars(void)
 		cl.movevars_airspeedlimit_nonqw = 0;
 	}
 
-	if(!(cl.moveflags & MOVEFLAG_VALID))
-	{
-		if(gamemode == GAME_NEXUIZ)  // Legacy hack to work with old servers of Nexuiz.
-			cl.moveflags = MOVEFLAG_Q2AIRACCELERATE;
-	}
-
 	if(cl.movevars_aircontrol_power <= 0)
 		cl.movevars_aircontrol_power = 2; // CPMA default
 }

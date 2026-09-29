@@ -586,17 +586,6 @@ static void Cmd_Exec(cmd_state_t *cmd, const char *filename)
 "r_shadow_bumpscale_basetexture 4\n"
 					);
 			break;
-		case GAME_NEXUIZ:
-			Cbuf_InsertText(cmd, "\n"
-"sv_gameplayfix_q2airaccelerate 1\n"
-"sv_gameplayfix_stepmultipletimes 1\n"
-				);
-			if (cls.state != ca_dedicated)
-				Cbuf_InsertText(cmd, "\n"
-"csqc_polygons_defaultmaterial_nocullface 1\n"
-"con_chatsound_team_mask 13\n"
-					);
-			break;
 		case GAME_XONOTIC:
 		case GAME_VORETOURNAMENT:
 			Cbuf_InsertText(cmd, "\n"

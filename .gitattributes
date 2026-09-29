@@ -24,7 +24,6 @@ blind_id -diff -crlf
 *.bmp -diff -crlf
 branch-manager crlf=input
 *.brand crlf=input
-BSDmakefile crlf=input
 bsp2ent crlf=input
 *.bsp -diff -crlf
 *.cache -diff -crlf
