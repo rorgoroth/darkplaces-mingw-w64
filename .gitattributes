@@ -182,7 +182,6 @@ SDL -diff -crlf
 *.shader crlf=input
 *.sh crlf=input
 *.skin crlf=input
-*.sln -crlf
 *.sounds crlf=input
 *.sp2 -diff -crlf
 *.spr32 -diff -crlf

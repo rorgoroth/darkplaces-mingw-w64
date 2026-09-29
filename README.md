@@ -106,22 +106,6 @@ To build the main executable, input `make sdl-release` which creates the file ca
 If you get errors (that don't seem to be about missing dependencies) try `make clean` before compiling, especially if you updated your system since the last time you compiled.
 
 
-### Windows (Visual Studio 2019)
-
-Not recommended due to poor support for C standards, and lack of maintenance.
-
-DarkPlaces requires C11, so Windows SDK 10.0.20348.0 or later is needed.  
-To install it, run the Visual Studio Installer, click "Modify", click "Individual components", type "Windows SDK" in the search box, select the latest Windows SDK and de-select older versions.  
-You will also need "NuGet package manager" selected (to download SDL2 headers the first time you build).
-Click "Modify" to apply the changes.  
-
-Open `platform/windows/darkplaces-vs2019.sln`, select build type (`Debug` or `Release`) and platform (`Win32` or `x64`), and choose "Build Solution" from the "Build" menu to create files `darkplaces-sdl2-vs2019.exe` and `SDL2.dll`.
-
-The Release build crashes. The Debug x64 build doesn't crash (but is rather slow) so this will be Fun for someone to debug.
-
-To get a build suitable for playing you'll need to use MinGW GCC, or download the autobuild from Xonotic (see above).
-
-
 ### Web-Assembly (Emscripten)
 
 Note that this requires a linux device or WSL2.
@@ -159,7 +143,7 @@ src/
   render/    gl_*, r_*, video backend (vid_*), fonts, image loading, shadow BSP, portals
   model/     model loaders (BSP, MDL/MD3/IQM/... , sprites), curves
   sound/     mixer, sound formats, CD audio
-platform/    windows/ (.rc, icons, Visual Studio project), unix/, apple/, wasm/
+platform/    windows/ (.rc and icons), unix/, apple/, wasm/
 docs/        darkplaces.txt, todo, Doxyfile, dpdefs/
 tools/       standalone helper programs and scripts
 ```
