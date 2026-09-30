@@ -32,7 +32,7 @@ static int img_fontmap[256] = {
  *     http://www.unicode.org/Public/UNIDATA/Blocks.txt
  *
  * Let's call these "bigblocks".
- * These characters are "spreaded", and ordinary maps will 
+ * These characters are "spreaded", and ordinary maps will
  *     waste huge amount of resources rendering/caching unused glyphs.
  *
  * So, a new design is introduced to solve the problem:

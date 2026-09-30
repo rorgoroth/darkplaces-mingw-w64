@@ -9,7 +9,7 @@
 
 #include "utf8lib.h"
 
-/* 
+/*
  * From http://www.unicode.org/Public/UNIDATA/Blocks.txt
  *
  *   E000..F8FF; Private Use Area

@@ -1278,7 +1278,7 @@ static size_t Cmd_PreprocessString(cmd_state_t *cmd, const char *intext, char *o
 				}
 			}
 		}
-		else 
+		else
 			outtext[outlen++] = *in++;
 	}
 	outtext[outlen] = '\0';
@@ -1459,7 +1459,7 @@ static void Cmd_Apropos_f(cmd_state_t *cmd)
 static cmd_state_t *Cmd_AddInterpreter(cmd_buf_t *cbuf, cvar_state_t *cvars, unsigned cvars_flagsmask, unsigned cmds_flagsmask, cmd_userdefined_t *userdefined)
 {
 	cmd_state_t *cmd = (cmd_state_t *)Mem_Alloc(tempmempool, sizeof(cmd_state_t));
-	
+
 	cmd->mempool = Mem_AllocPool("commands", 0, NULL);
 	// space for commands and script files
 	cmd->cbuf = cbuf;
@@ -1971,7 +1971,7 @@ void Cmd_ClearCSQCCommands (cmd_state_t *cmd)
 {
 	cmd_function_t *func;
 	cmd_function_t **next = &cmd->userdefined->qc_functions;
-	
+
 	while(*next)
 	{
 		func = *next;
@@ -1986,7 +1986,7 @@ extern cvar_t sv_cheats;
  * Cloudwalk FIXME: This idea sounded great in my head but...
  * How do we handle commands that can be received by the client,
  * but which the server can also execute locally?
- * 
+ *
  * If we create a callback where the engine will forward to server
  * but try to execute the command locally if it's dedicated,
  * we're back to intermixing client and server code which I'm

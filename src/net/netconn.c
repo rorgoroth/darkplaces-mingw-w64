@@ -202,7 +202,7 @@ void NetConn_UpdateFavorites_c(cvar_t *var)
 			dp_strlcpy(favorites_idfp[nFavorites_idfp], com_token, sizeof(favorites_idfp[nFavorites_idfp]));
 			++nFavorites_idfp;
 		}
-		else 
+		else
 		{
 			if(LHNETADDRESS_FromString(&favorites[nFavorites], com_token, 26000))
 				++nFavorites;
@@ -253,7 +253,7 @@ static qbool _ServerList_Entry_Compare( serverlist_entry_t *A, serverlist_entry_
 		if(A->info.isfavorite != B->info.isfavorite)
 			return A->info.isfavorite;
 	}
-	
+
 	switch( serverlist_sortbyfield ) {
 		case SLIF_PING:
 			result = A->info.ping - B->info.ping;
@@ -3095,7 +3095,7 @@ static const char *RCon_Authenticate(lhnetaddress_t *peeraddress, const char *pa
 		if(comparator(peeraddress, userpass_start, password, cs, cslen))
 			goto check;
 	}
-	
+
 	return NULL; // DENIED
 
 check:

@@ -272,7 +272,7 @@ void Sys_SDL_Init(void)
 	// COMMANDLINEOPTION: sdl: -nocrashdialog disables "Engine Error" crash dialog boxes
 	if(!Sys_CheckParm("-nocrashdialog"))
 		nocrashdialog = false;
-	
+
 	emscripten_set_resize_callback(EMSCRIPTEN_EVENT_TARGET_WINDOW, 0, EM_FALSE, em_on_resize);
 }
 

@@ -742,7 +742,7 @@ static void CheckPendingDownloads(void)
 				}
 				else
 					qcurl_easy_setopt(di->curle, CURLOPT_USERAGENT, "");
-				if(developer_curl.integer) 
+				if(developer_curl.integer)
 					qcurl_easy_setopt(di->curle, CURLOPT_VERBOSE, (long) 1);
 				qcurl_easy_setopt(di->curle, CURLOPT_REFERER, di->referer);
 				qcurl_easy_setopt(di->curle, CURLOPT_RESUME_FROM, (long) di->startpos);
@@ -788,7 +788,7 @@ static void CheckPendingDownloads(void)
 				}
 
 				qcurl_easy_setopt(di->curle, CURLOPT_HTTPHEADER, di->slist);
-				
+
 				qcurl_multi_add_handle(curlm, di->curle);
 				di->started = true;
 				++numdownloads;

@@ -2055,7 +2055,7 @@ void CL_UpdateWorld(void)
 	r_refdef.scene.numlights = 0;
 	r_refdef.view.matrix = identitymatrix;
 	r_refdef.view.quality = 1;
-		
+
 	cl.num_brushmodel_entities = 0;
 
 	if (cls.state == ca_connected && cls.signon == SIGNONS)
@@ -2561,7 +2561,7 @@ void CL_MeshEntities_Init(void)
 		ent = cl_meshentities + i;
 		ent->state_current.active = true;
 		ent->render.model = cl_meshentitymodels + i;
-		Mod_Mesh_Create(ent->render.model, cl_meshentitynames[i]);	
+		Mod_Mesh_Create(ent->render.model, cl_meshentitynames[i]);
 		ent->render.alpha = 1;
 		ent->render.flags = RENDER_SHADOW | RENDER_LIGHT;
 		ent->render.framegroupblend[0].lerp = 1;
@@ -2952,10 +2952,10 @@ void CL_Shutdown (void)
 {
 	// be quiet while shutting down
 	S_StopAllSounds();
-	
+
 	// disconnect client from server if active
 	CL_Disconnect();
-	
+
 	CL_Video_Shutdown();
 
 #ifdef CONFIG_MENU
@@ -2965,7 +2965,7 @@ void CL_Shutdown (void)
 #endif
 
 	S_Terminate ();
-	
+
 	R_Modules_Shutdown();
 	VID_Shutdown();
 

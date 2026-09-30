@@ -637,7 +637,7 @@ void Log_ConPrint (const char *msg)
 			FS_Print (logfile, sanitizedmsg);
 			Mem_Free(sanitizedmsg);
 		}
-		else 
+		else
 		{
 			FS_Print (logfile, msg);
 		}
@@ -827,7 +827,7 @@ static void Con_ConDump_f(cmd_state_t *cmd)
 			FS_Write(file, sanitizedmsg, strlen(sanitizedmsg));
 			Mem_Free(sanitizedmsg);
 		}
-		else 
+		else
 		{
 			FS_Write(file, CON_LINES(i).start, CON_LINES(i).len);
 		}
@@ -1312,14 +1312,14 @@ void Con_MaskPrint(unsigned additionalmask, const char *msg)
 
 										break;
 									}
-									
+
 									color = Sys_Con_NearestColor(rgb[0], rgb[1], rgb[2]);
 									in += 3; // 3 only, the switch down there does the fourth
 								}
 								else
 								{
 									color = in[1];
-								
+
 									if (sys_colortranslation.integer == 3 && isdigit(color)) // Quake to RGB
 									{
 										color -= '0';

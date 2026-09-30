@@ -371,7 +371,7 @@ void Sbar_Init (void)
 	Cvar_RegisterVariable(&cl_showdate);
 	Cvar_RegisterVariable(&cl_showdate_format);
 	Cvar_RegisterVariable(&cl_showtex);
-	
+
 	Cvar_RegisterVirtual(&cl_showfps, "showfps");
 	Cvar_RegisterVirtual(&cl_showsound, "showsound");
 	Cvar_RegisterVirtual(&cl_showblur, "showblur");
@@ -382,7 +382,7 @@ void Sbar_Init (void)
 	Cvar_RegisterVirtual(&cl_showdate, "showdate");
 	Cvar_RegisterVirtual(&cl_showdate_format, "showdate_format");
 	Cvar_RegisterVirtual(&cl_showtex, "showtex");
-	
+
 	Cvar_RegisterVariable(&sbar_alpha_bg);
 	Cvar_RegisterVariable(&sbar_alpha_fg);
 	Cvar_RegisterVariable(&sbar_hudselector);
