@@ -10,7 +10,6 @@
 TRIPLE  := x86_64-w64-mingw32
 CC      := $(TRIPLE)-clang
 WINDRES := $(TRIPLE)-windres
-STRIP   := $(TRIPLE)-strip
 
 EXE_SV  := xonotic-dedicated.exe
 EXE_SDL := xonotic-sdl.exe
@@ -148,16 +147,30 @@ endif
 # and the demo/CI hash on the first build; add -mno-avx back here if they change.
 ARCH ?= -march=x86-64-v3
 
+# Per-target CPU baseline. Both default to ARCH; override one to loosen it, e.g. a dedicated
+# server that has to run on old VPS hardware:  make ARCH_SV=-march=x86-64-v2 sv-release
+ARCH_SV  ?= $(ARCH)
+ARCH_SDL ?= $(ARCH)
+
 # -ffp-contract=off: v3 has FMA and clang fuses a*b+c by default, which changes float results
 # (QC physics, CI hash). Remove it if you want the extra speed and don't need identical results.
 FPFLAGS := -fno-math-errno -fno-trapping-math -ffp-contract=off
+
+# -fno-strict-aliasing (see OPT_COMMON below): the engine casts between float/int/byte buffers in many places and ThinLTO
+# sees far more of the program at once, so don't rely on strict aliasing being respected (~0-2%).
+# Try removing it if you have tested that the build is fine without.
 
 # NOTE: *never* *ever* use the -ffast-math or -funsafe-math-optimizations flag
 # Also, since gcc 5, -ffinite-math-only makes NaN and zero compare equal inside engine code but
 # not inside QC, which causes error spam for seemingly valid QC code like
 # if (x != 0) return 1 / x;
 # -flto=thin and --icf=all need clang and lld (llvm-mingw).
-OPT := -O3 $(FPFLAGS) $(ARCH) -flto=thin
+# -fno-ident drops the compiler version string from the objects/executable.
+# OPT_* are used for both compiling and linking: with ThinLTO the codegen happens at link time
+# and takes its -O level and -march from the link command.
+OPT_COMMON := -O3 $(FPFLAGS) -fno-strict-aliasing -flto=thin -fno-ident
+OPT_SV     := $(OPT_COMMON) $(ARCH_SV)
+OPT_SDL    := $(OPT_COMMON) $(ARCH_SDL)
 
 WARNINGS := -Wall -Werror=vla -Wc++-compat -Wwrite-strings -Wshadow -Wold-style-definition \
 	-Wstrict-prototypes -Wsign-compare -Wdeclaration-after-statement -Wmissing-prototypes
@@ -172,19 +185,22 @@ vpath %.c  $(SRC_DIRS)
 vpath %.rc $(WINRES_DIR)
 
 # -MMD -MP: generate .d dependency files (-MP so deleted headers don't break the build)
-CFLAGS_BASE := $(OPT) -fdata-sections -ffunction-sections -fvisibility=hidden \
+CFLAGS_BASE := -fdata-sections -ffunction-sections -fvisibility=hidden \
 	-DUSE_WSPIAPI_H -DSUPPORTIPV6 -D_FILE_OFFSET_BITS=64 -D__KERNEL_STRICT_NAMES \
 	-MMD -MP $(WARNINGS) $(CFLAGS_FS) $(CFLAGS_LIBZ) $(CFLAGS_LIBJPEG) $(CFLAGS_XMP) \
 	$(CFLAGS_ODE) $(CFLAGS_CRYPTO) $(CFLAGS_CRYPTO_RIJNDAEL) \
 	$(addprefix -I,$(SRC_DIRS)) $(CFLAGS_EXTRA)
 
-CFLAGS_SV  := $(CFLAGS_BASE)
-CFLAGS_SDL := $(CFLAGS_BASE) $(SDL_CFLAGS) -DCONFIG_MENU $(CFLAGS_CAPTURE)
+CFLAGS_SV  := $(OPT_SV) $(CFLAGS_BASE)
+CFLAGS_SDL := $(OPT_SDL) $(CFLAGS_BASE) $(SDL_CFLAGS) -DCONFIG_MENU $(CFLAGS_CAPTURE)
 
 # builddate.c is deliberately compiled as part of the link command (not to a .o), so it
 # is rebuilt on every link and the executable gets an accurate build date string.
 VCREVISION := $(shell git describe --always --dirty='~' 2>/dev/null || echo -)
-LDFLAGS := $(OPT) -Wl,--gc-sections,--icf=all -DVCREVISION=$(VCREVISION) -DBUILDTYPE=release
+# -s strips symbols at link time, so there is no separate strip step.
+LDFLAGS_BASE := -Wl,--gc-sections,--icf=all,-s -DVCREVISION=$(VCREVISION) -DBUILDTYPE=release
+LDFLAGS_SV   := $(OPT_SV) $(LDFLAGS_BASE)
+LDFLAGS_SDL  := $(OPT_SDL) $(LDFLAGS_BASE)
 
 LIBS_SV  := $(LIB_CRYPTO) $(LIB_CRYPTO_RIJNDAEL) -mconsole -lwinmm -lws2_32 $(LIB_Z) $(LIB_JPEG) $(LIB_ODE)
 LIBS_SDL := $(LIB_CRYPTO) $(LIB_CRYPTO_RIJNDAEL) $(SDL_LIBS) -lwinmm -lws2_32 $(LIB_Z) $(LIB_JPEG) $(LIB_ODE) $(LIB_XMP)
@@ -241,7 +257,9 @@ help:
 
 # Executables
 $(EXE_SV):  LIBS = $(LIBS_SV)
+$(EXE_SV):  LDFLAGS = $(LDFLAGS_SV)
 $(EXE_SDL): LIBS = $(LIBS_SDL)
+$(EXE_SDL): LDFLAGS = $(LDFLAGS_SDL)
 
 $(EXE_SV):  $(OBJS_SV)  $(OUT)/res/darkplaces.o
 $(EXE_SDL): $(OBJS_SDL) $(OUT)/res/darkplaces.o
@@ -249,8 +267,6 @@ $(EXE_SDL): $(OBJS_SDL) $(OUT)/res/darkplaces.o
 $(EXE_ALL): builddate.c
 	$(call say,LD    $@)
 	$(Q)$(CC) -o $@ $^ $(LDFLAGS) $(LIBS)
-	$(call say,STRIP $@)
-	$(Q)$(STRIP) $@
 
 # Objects
 $(OUT)/sv/%.o: %.c
